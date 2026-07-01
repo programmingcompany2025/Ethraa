@@ -1,0 +1,6 @@
+{
+  "name": "إثراء المصممين - Ethraa Designers",
+  "description": "تطبيق إدارة المشاريع، الإيرادات، والمبيعات لزيادة الأرباح وتحليل الأداء الذكي للشركات الهندسية",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
