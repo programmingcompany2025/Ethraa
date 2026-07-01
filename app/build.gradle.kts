@@ -9,6 +9,34 @@ plugins {
   alias(libs.plugins.google.services)
 }
 
+// Generate a self-signed release keystore if it doesn't exist
+val keystoreFile = file("${rootDir}/my-upload-key.jks")
+if (!keystoreFile.exists()) {
+    try {
+        println("Generating self-signed release keystore...")
+        val pb = ProcessBuilder(
+            "keytool", "-genkey", "-v",
+            "-keystore", keystoreFile.absolutePath,
+            "-alias", "upload",
+            "-keyalg", "RSA",
+            "-keysize", "2048",
+            "-validity", "10000",
+            "-storepass", "password123",
+            "-keypass", "password123",
+            "-dname", "CN=AI Studio, O=AI Studio, C=US"
+        )
+        val process = pb.start()
+        val exitCode = process.waitFor()
+        if (exitCode == 0) {
+            println("Successfully generated keystore at ${keystoreFile.absolutePath}")
+        } else {
+            println("Failed to generate keystore, exit code: $exitCode")
+        }
+    } catch (e: Exception) {
+        println("Error generating keystore: ${e.message}")
+    }
+}
+
 android {
   namespace = "com.example"
   compileSdk { version = release(36) { minorApiLevel = 1 } }
@@ -27,9 +55,9 @@ android {
     create("release") {
       val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
       storeFile = file(keystorePath)
-      storePassword = System.getenv("STORE_PASSWORD")
-      keyAlias = "upload"
-      keyPassword = System.getenv("KEY_PASSWORD")
+      storePassword = System.getenv("STORE_PASSWORD") ?: "password123"
+      keyAlias = System.getenv("KEY_ALIAS") ?: "upload"
+      keyPassword = System.getenv("KEY_PASSWORD") ?: "password123"
     }
     create("debugConfig") {
       storeFile = file("${rootDir}/debug.keystore")
