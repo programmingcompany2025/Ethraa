@@ -9,32 +9,13 @@ plugins {
   alias(libs.plugins.google.services)
 }
 
-// Generate a self-signed release keystore if it doesn't exist
-val keystoreFile = file("${rootDir}/my-upload-key.jks")
-if (!keystoreFile.exists()) {
-    try {
-        println("Generating self-signed release keystore...")
-        val pb = ProcessBuilder(
-            "keytool", "-genkey", "-v",
-            "-keystore", keystoreFile.absolutePath,
-            "-alias", "upload",
-            "-keyalg", "RSA",
-            "-keysize", "2048",
-            "-validity", "10000",
-            "-storepass", "password123",
-            "-keypass", "password123",
-            "-dname", "CN=AI Studio, O=AI Studio, C=US"
-        )
-        val process = pb.start()
-        val exitCode = process.waitFor()
-        if (exitCode == 0) {
-            println("Successfully generated keystore at ${keystoreFile.absolutePath}")
-        } else {
-            println("Failed to generate keystore, exit code: $exitCode")
-        }
-    } catch (e: Exception) {
-        println("Error generating keystore: ${e.message}")
-    }
+import java.util.Properties
+import java.io.FileInputStream
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
 }
 
 android {
@@ -53,11 +34,11 @@ android {
 
   signingConfigs {
     create("release") {
-      val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
+      val keystorePath = localProperties.getProperty("RELEASE_STORE_FILE") ?: System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
       storeFile = file(keystorePath)
-      storePassword = System.getenv("STORE_PASSWORD") ?: "password123"
-      keyAlias = System.getenv("KEY_ALIAS") ?: "upload"
-      keyPassword = System.getenv("KEY_PASSWORD") ?: "password123"
+      storePassword = localProperties.getProperty("RELEASE_STORE_PASSWORD") ?: System.getenv("STORE_PASSWORD") ?: "password123"
+      keyAlias = localProperties.getProperty("RELEASE_KEY_ALIAS") ?: System.getenv("KEY_ALIAS") ?: "upload"
+      keyPassword = localProperties.getProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("KEY_PASSWORD") ?: "password123"
     }
     create("debugConfig") {
       storeFile = file("${rootDir}/debug.keystore")
@@ -118,6 +99,7 @@ dependencies {
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)
+  implementation(libs.androidx.compose.ui.text.google.fonts)
   implementation(libs.androidx.core.ktx)
   // implementation(libs.androidx.datastore.preferences)
   implementation(libs.androidx.lifecycle.runtime.compose)

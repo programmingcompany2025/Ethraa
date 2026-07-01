@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -121,14 +122,14 @@ fun ClientsTab(viewModel: AppViewModel) {
                         title = "مستحقات على العملاء",
                         value = totalDues,
                         color = MaterialTheme.colorScheme.error,
-                        icon = Icons.Default.TrendingDown,
+                        icon = Icons.AutoMirrored.Filled.TrendingDown,
                         modifier = Modifier.weight(1f)
                     )
                     MetricSummaryBox(
                         title = "المدفوعات المستلمة",
                         value = totalPaid,
                         color = MaterialTheme.colorScheme.primary,
-                        icon = Icons.Default.TrendingUp,
+                        icon = Icons.AutoMirrored.Filled.TrendingUp,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -398,7 +399,7 @@ fun ClientCard(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.ReceiptLong, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ReceiptLong, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(4.dp))
                     Text("سند قبض", fontSize = 11.sp)
                 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
@@ -119,7 +120,7 @@ fun DashboardScreen(viewModel: AppViewModel, onNavigateToTab: (Int) -> Unit) {
                 FinancialCard(
                     title = "إجمالي الإيرادات",
                     amount = totalRevenue,
-                    icon = Icons.Filled.TrendingUp,
+                    icon = Icons.AutoMirrored.Filled.TrendingUp,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.weight(1f),
                     reduceMotion = reduceMotion
@@ -129,7 +130,7 @@ fun DashboardScreen(viewModel: AppViewModel, onNavigateToTab: (Int) -> Unit) {
                 FinancialCard(
                     title = "إجمالي المصروفات",
                     amount = totalExpenses,
-                    icon = Icons.Filled.TrendingDown,
+                    icon = Icons.AutoMirrored.Filled.TrendingDown,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.weight(1f),
                     reduceMotion = reduceMotion
